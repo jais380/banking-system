@@ -94,7 +94,7 @@ exports.register = async (req, res) => {
         const recordDate = new Date(result.dob).toISOString().split("T")[0];
 
         if(inputDate !== recordDate) {
-            return res.status(400).json({error: `DOB provided does not match ${fields[tAuthType].toUpperCase()} records`});
+            return res.status(400).json({error: `DOB provided does not match ${fields.tAuthType.toUpperCase()} records`});
         }
 
         //hash password
@@ -317,6 +317,11 @@ exports.login = async (req, res) => {
             return res.status(404).json({error: "User not found"});
         }
 
+        //check if user is locked
+        if(existingUser.isLocked) {
+            return res.status(400).json({error: "User account is locked due to suspicious activities"});
+        }
+
         //check if user is verified
         if(!existingUser.emailVerified) {
             return res.status(400).json({error: "User is not verified"});
@@ -326,6 +331,12 @@ exports.login = async (req, res) => {
         const validPassword = await comparePassword(tPassword, existingUser.password);
 
         if(!validPassword) {
+            if(existingUser.loginAttempts === 3) {
+                existingUser.isLocked = true;
+            } else if(existingUser.loginAttempts < 3) {
+                existingUser.loginAttempts += 1;
+            }
+            await existingUser.save();
             return res.status(400).json({error: "Wrong Password"});
         }
 
@@ -335,6 +346,10 @@ exports.login = async (req, res) => {
             email: existingUser.email,
             phone: existingUser.phone
         }, process.env.JWT_SECRET, {expiresIn: "1h"});
+
+        //reset login attempt
+        existingUser.loginAttempts = existingUser.loginAttempts > 0 ? 0 : existingUser.loginAttempts;
+        await existingUser.save();
 
         return res.status(200).json({
             message: "User Logged In Successfully",

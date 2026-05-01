@@ -21,12 +21,24 @@ const transactionSchema = new mongoose.Schema(
         trim: true
     },
 
+    amount: {
+        type: Number,
+        required: true,
+        default: 1
+    },
+
     transactionId: {
         type: String,
         required: true,
         unique: true,
         trim: true
     },
+
+    status: {
+        type: String,
+        enum: ["CREDIT", "DEBIT"],
+        required: true
+    }
 },
 {
     timestamps: true,

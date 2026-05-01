@@ -43,6 +43,7 @@ const userSchema = new mongoose.Schema(
     authId: {
         type: String,
         required: true,
+        unique: true,
         trim: true
     },
 
@@ -60,6 +61,16 @@ const userSchema = new mongoose.Schema(
     tempOtp: {
         type: String,
         default: null
+    },
+
+    isLocked: {
+        type: Boolean,
+        default: false
+    },
+
+    loginAttempts: {
+        type: Number,
+        default: 0
     },
 
     expiresAt: {

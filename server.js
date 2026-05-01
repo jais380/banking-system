@@ -6,6 +6,7 @@ const { connectDB } = require("./config/db");
 const port = process.env.PORT ?? 8080;
 
 const authRoutes = require("./routes/auth-routes");
+const accountRoutes = require("./routes/account-routes");
 
 app.use(express.json());
 
@@ -13,6 +14,7 @@ app.use(express.json());
 app.get("/test", (req, res) => res.send("Server is alive!"));
 
 app.use("/api", authRoutes);
+app.use("/api", accountRoutes);
 
 
 const startServer = async (port) => {
