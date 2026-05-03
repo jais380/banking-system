@@ -97,7 +97,7 @@ exports.getTransactionByRef = async (ref, token) => {
 
 exports.getAccountName = async (accountNumber, token) => {
     const headers = config(token);
-    const response = await axios.get(`${process.env.NIBSS_BASE_URL}/account/name-enquiry/${accountNumber}`, headers);
+    const response = await axios.get(`${process.env.NIBSS_BASE_URL}/api/account/name-enquiry/${accountNumber}`, headers);
 
     if(!response.data) {
         throw new Error("Nibss responded with undefined");

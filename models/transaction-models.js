@@ -17,7 +17,6 @@ const transactionSchema = new mongoose.Schema(
     receiver: {
         type: String,
         required: true,
-        unique: true,
         trim: true
     },
 
@@ -30,7 +29,6 @@ const transactionSchema = new mongoose.Schema(
     transactionId: {
         type: String,
         required: true,
-        unique: true,
         trim: true
     },
 

@@ -44,6 +44,13 @@ exports.register = async (req, res) => {
             return res.status(400).json({ message: "Email already exists" });
         }
 
+        //ensure the authId does not already exist
+        const existingAuthId = await User.exists({ authId: fields.tAuthId });
+
+        if(existingAuthId) {
+            return res.status(400).json({ message: "AuthId already exists" });
+        }
+
         //ensure authType is either bvn or nin
         if(fields.tAuthType !== "bvn" && fields.tAuthType !== "nin") {
             return res.status(400).json({ message: "Invalid authType. Expected bvn or nin" });

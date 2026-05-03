@@ -47,9 +47,9 @@ exports.getAccountProfile = async (req, res) => {
             return res.status(200).json({
                 message: "Account Profile fetched successfully",
                 response: {
-                    accountName: account.account.accountName,
-                    accountNumber: account.account.accountNumber,
-                    balance: formatCurrency(account.account.balance) //formatted balance for the frontend
+                    accountName: newAccount.accountName,
+                    accountNumber: newAccount.accountNumber,
+                    balance: formatCurrency(newAccount.balance) //formatted balance for the frontend
                 }
             });
         } else{
